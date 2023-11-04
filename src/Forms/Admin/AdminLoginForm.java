@@ -78,7 +78,7 @@ public class AdminLoginForm extends JFrame {
                     }
                 };
 
-                worker.execute(); // SwingWorker'ı başlatma
+                worker.execute(); // SwingWorker başlat
             }
         });
         backButton.addActionListener(new ActionListener() {
