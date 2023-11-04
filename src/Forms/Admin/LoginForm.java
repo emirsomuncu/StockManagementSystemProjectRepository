@@ -16,7 +16,7 @@ public class LoginForm extends JFrame {
     private JTextArea errorTextArea;
 
     public LoginForm() {
-        setTitle("Login");
+        setTitle("LoginPage");
         setContentPane(loginJP);
         setMinimumSize(new Dimension(700, 500));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
