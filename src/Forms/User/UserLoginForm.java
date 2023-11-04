@@ -1,6 +1,8 @@
 package Forms.User;
 
 import Core.DatabaseConnection;
+import Forms.Register.RegisterUser;
+import Forms.Welcome.WelcomePageForm;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,9 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserLoginForm extends JFrame {
-    private JPanel userLoginJP;
-    private JTextField textField1;
-    private JPasswordField passwordField1;
+    private JPanel userLoginPanel;
     private JButton registerButton;
     private JTextField emailField;
     private JPasswordField passwordField;
@@ -22,8 +22,8 @@ public class UserLoginForm extends JFrame {
     private JTextArea errorTextArea;
 
     public UserLoginForm() {
-        setTitle("Login");
-        setContentPane(userLoginJP);
+        setTitle("User Login");
+        setContentPane(userLoginPanel);
         setMinimumSize(new Dimension(700, 500));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -43,7 +43,7 @@ public class UserLoginForm extends JFrame {
 
                         Connection connection = DatabaseConnection.connectToDatabase();
 
-                        String query = "SELECT * FROM User WHERE Email = ? AND Password = ?";
+                        String query = "SELECT * FROM Users WHERE Email = ? AND Password = ?";
                         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                             preparedStatement.setString(1, email);
                             preparedStatement.setString(2, password);
@@ -67,6 +67,8 @@ public class UserLoginForm extends JFrame {
                             boolean loggedIn = get();
                             if (loggedIn) {
                                 System.out.println("Successfully logged in.");
+                                WelcomePageForm welcomePageForm = new WelcomePageForm();
+                                dispose();
                             } else {
                                 errorTextArea.setText("Invalid username or password.");
                             }
@@ -79,6 +81,16 @@ public class UserLoginForm extends JFrame {
                 };
 
                 worker.execute(); // SwingWorker'ı başlatma
+            }
+        });
+        registerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object source = e.getSource();
+                if(source == registerButton) {
+                    RegisterUser registerUser = new RegisterUser();
+                    dispose();
+                }
             }
         });
     }

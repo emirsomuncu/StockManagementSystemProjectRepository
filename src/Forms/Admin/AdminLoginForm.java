@@ -1,6 +1,7 @@
 package Forms.Admin;
 
 import Core.DatabaseConnection;
+import Forms.Welcome.WelcomePageForm;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,21 +10,23 @@ import java.awt.event.ActionListener;
 import java.sql.*;
 
 public class AdminLoginForm extends JFrame {
-    private JPanel loginJP;
-    private JTextField emailField;
+    private JPanel adminPanel;
+    private JTextField textField1;
+    private JPasswordField passwordField1;
+    private JButton backButton;
+    private JTextField nameField;
     private JPasswordField passwordField;
     private JButton loginButton;
-    private JTextArea errorTextArea;
+    private JLabel messageLabel;
 
     public AdminLoginForm() {
         setTitle("Login");
-        setContentPane(loginJP);
+        setContentPane(adminPanel);
         setMinimumSize(new Dimension(700, 500));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
 
-        errorTextArea.setForeground(Color.RED);
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -32,7 +35,7 @@ public class AdminLoginForm extends JFrame {
                 SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
                     @Override
                     protected Boolean doInBackground() throws Exception {
-                        String Name = emailField.getText();
+                        String Name = nameField.getText();
                         char[] passwordChars = passwordField.getPassword(); // Şifreyi char[] olarak al
                         String password = new String(passwordChars);
                         //String password = new String(passwordChars);
@@ -65,7 +68,7 @@ public class AdminLoginForm extends JFrame {
                                 AdminDashboardForm adminDashboardForm = new AdminDashboardForm();
                                 dispose();
                             } else {
-                                errorTextArea.setText("Invalid username or password.");
+                                messageLabel.setText("Invalid username or password.");
                             }
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -76,6 +79,16 @@ public class AdminLoginForm extends JFrame {
                 };
 
                 worker.execute(); // SwingWorker'ı başlatma
+            }
+        });
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object source = e.getSource();
+                if(source == backButton) {
+                    WelcomePageForm welcomePageForm = new WelcomePageForm();
+                    dispose();
+                }
             }
         });
     }
