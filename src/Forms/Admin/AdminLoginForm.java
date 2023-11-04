@@ -11,10 +11,8 @@ import java.sql.*;
 
 public class AdminLoginForm extends JFrame {
     private JPanel adminPanel;
-    private JTextField textField1;
-    private JPasswordField passwordField1;
+    private JTextField usernameField;
     private JButton backButton;
-    private JTextField nameField;
     private JPasswordField passwordField;
     private JButton loginButton;
     private JLabel messageLabel;
@@ -35,7 +33,7 @@ public class AdminLoginForm extends JFrame {
                 SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
                     @Override
                     protected Boolean doInBackground() throws Exception {
-                        String Name = nameField.getText();
+                        String Name = usernameField.getText();
                         char[] passwordChars = passwordField.getPassword(); // Şifreyi char[] olarak al
                         String password = new String(passwordChars);
                         //String password = new String(passwordChars);
