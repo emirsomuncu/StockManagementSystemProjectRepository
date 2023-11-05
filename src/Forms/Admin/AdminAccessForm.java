@@ -1,9 +1,10 @@
 package Forms.Admin;
-
 import Core.DatabaseConnection;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,6 +21,7 @@ public class AdminAccessForm extends JFrame {
     private JButton deleteButton;
     private JButton addButton;
     private JButton updateButton;
+    private DefaultTableModel tableModel;
 
     public AdminAccessForm() {
         setTitle("Admin Main Page");
@@ -29,56 +31,56 @@ public class AdminAccessForm extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
 
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Object source = e.getSource();
-                if(source == addButton) {
-                    AdminAddForm adminAddForm = new AdminAddForm();
-                    dispose();
-                }
-            }
-        });
-        updateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Object source = e.getSource();
-                if(source == updateButton) {
-                    AdminUpdateForm adminUpdateForm = new AdminUpdateForm();
-                    dispose();
-                }
-            }
-        });
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Object source = e.getSource();
-                if(source == deleteButton) {
-                    AdminDeleteForm adminDeleteForm = new AdminDeleteForm();
-                    dispose();
-                }
-            }
+        addButton.addActionListener(e -> {
+            AdminAddForm adminAddForm = new AdminAddForm();
+            dispose();
         });
 
-        loadTableData(); // Tabloyu verilerle doldur
+        updateButton.addActionListener(e -> {
+            AdminUpdateForm adminUpdateForm = new AdminUpdateForm();
+            dispose();
+        });
+
+        deleteButton.addActionListener(e -> {
+            AdminDeleteForm adminDeleteForm = new AdminDeleteForm();
+            dispose();
+        });
+
+        tableModel = new DefaultTableModel();
+        table.setModel(tableModel);
+        loadTableData();
+
+        productField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                searchProducts(productField.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                searchProducts(productField.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                searchProducts(productField.getText());
+            }
+        });
     }
 
     private void loadTableData() {
         Connection connection = DatabaseConnection.connectToDatabase();
-        DefaultTableModel tableModel = new DefaultTableModel();
 
         try {
             String query = "SELECT * FROM Products";
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
 
-            // Sütun başlıklarını alın ve tabloya ekleyin
             int columnCount = resultSet.getMetaData().getColumnCount();
             for (int i = 1; i <= columnCount; i++) {
                 tableModel.addColumn(resultSet.getMetaData().getColumnName(i));
             }
 
-            // Verileri tabloya ekleyin
             while (resultSet.next()) {
                 Object[] row = new Object[columnCount];
                 for (int i = 1; i <= columnCount; i++) {
@@ -86,20 +88,39 @@ public class AdminAccessForm extends JFrame {
                 }
                 tableModel.addRow(row);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-            // JTable'a DefaultTableModel'i bağlayın
-            table.setModel(tableModel);
+    private void searchProducts(String searchTerm) {
+        // Önce tüm satırları temizleyin
+        tableModel.setRowCount(0);
+
+        Connection connection = DatabaseConnection.connectToDatabase();
+        try {
+            String query = "SELECT * FROM Products WHERE name LIKE ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, "%" + searchTerm + "%");
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String category = resultSet.getString("category");
+                String name = resultSet.getString("name");
+                double price = resultSet.getDouble("price");
+                String unit = resultSet.getString("unit");
+
+                tableModel.addRow(new Object[]{id, category, name, price, unit});
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                AdminAccessForm adminAccessForm = new AdminAccessForm();
-            }
+        SwingUtilities.invokeLater(() -> {
+            AdminAccessForm adminAccessForm = new AdminAccessForm();
         });
     }
 }
