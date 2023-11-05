@@ -20,7 +20,7 @@ public class RegisterUser extends JFrame {
     public RegisterUser() {
         setTitle("Register Page");
         setContentPane(registerPanel);
-        setMinimumSize(new Dimension(400, 300));
+        setMinimumSize(new Dimension(800, 600));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
         setLocationRelativeTo(null);

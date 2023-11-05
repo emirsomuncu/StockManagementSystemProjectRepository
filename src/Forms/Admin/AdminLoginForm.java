@@ -18,9 +18,9 @@ public class AdminLoginForm extends JFrame {
     private JLabel messageLabel;
 
     public AdminLoginForm() {
-        setTitle("Login");
+        setTitle("Admin Login");
         setContentPane(adminPanel);
-        setMinimumSize(new Dimension(700, 500));
+        setMinimumSize(new Dimension(800, 600));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -67,6 +67,8 @@ public class AdminLoginForm extends JFrame {
                                 dispose();
                             } else {
                                 messageLabel.setText("Invalid username or password.");
+                                messageLabel.setForeground(Color.RED);
+                                return;
                             }
                         } catch (Exception ex) {
                             ex.printStackTrace();

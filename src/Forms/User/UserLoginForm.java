@@ -19,12 +19,13 @@ public class UserLoginForm extends JFrame {
     private JTextField emailField;
     private JPasswordField passwordField;
     private JButton loginButton;
-    private JTextArea errorTextArea;
+    private JLabel messageLabel;
+    private JButton backButton;
 
     public UserLoginForm() {
         setTitle("User Login");
         setContentPane(userLoginPanel);
-        setMinimumSize(new Dimension(700, 500));
+        setMinimumSize(new Dimension(800, 600));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -70,7 +71,9 @@ public class UserLoginForm extends JFrame {
                                 WelcomePageForm welcomePageForm = new WelcomePageForm();
                                 dispose();
                             } else {
-                                errorTextArea.setText("Invalid username or password.");
+                                messageLabel.setText("Invalid email or password.");
+                                messageLabel.setForeground(Color.RED);
+                                return;
                             }
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -89,6 +92,16 @@ public class UserLoginForm extends JFrame {
                 Object source = e.getSource();
                 if(source == registerButton) {
                     RegisterUser registerUser = new RegisterUser();
+                    dispose();
+                }
+            }
+        });
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object source = e.getSource();
+                if(source == backButton) {
+                    WelcomePageForm welcomePageForm = new WelcomePageForm();
                     dispose();
                 }
             }
