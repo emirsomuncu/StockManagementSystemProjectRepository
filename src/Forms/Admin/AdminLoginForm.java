@@ -63,7 +63,7 @@ public class AdminLoginForm extends JFrame {
                         try {
                             boolean loggedIn = get();
                             if (loggedIn) {
-                                AdminDashboardForm adminDashboardForm = new AdminDashboardForm();
+                                AdminAccessForm adminAccessForm = new AdminAccessForm();
                                 dispose();
                             } else {
                                 messageLabel.setText("Invalid username or password.");
