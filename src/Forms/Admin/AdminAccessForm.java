@@ -36,7 +36,7 @@ public class AdminAccessForm extends JFrame {
         });
 
         updateButton.addActionListener(e -> {
-            AdminUpdateForm adminUpdateForm = new AdminUpdateForm();
+            AdminUpdateForm adminUpdateForm = new AdminUpdateForm(1);
             dispose();
         });
 
