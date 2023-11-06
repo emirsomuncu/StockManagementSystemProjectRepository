@@ -1,14 +1,12 @@
 package Forms.Admin;
 
 import Core.DatabaseConnection;
-
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -43,14 +41,25 @@ public class AdminAccessForm extends JFrame {
         });
 
         deleteButton.addActionListener(e -> {
-            AdminDeleteForm adminDeleteForm = new AdminDeleteForm();
-            dispose();
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow >= 0) {
+                Object value = tableModel.getValueAt(selectedRow, 0);
+                if (value instanceof Integer) {
+                    int productId = (int) value;
+                    if (deleteProductFromDatabase(productId)) {
+                        tableModel.removeRow(selectedRow);
+                    }
+                } else {
+                    // İlgili işlemi hata durumu için burada yapabilirsiniz.
+                }
+            }
         });
+
 
         tableModel = new DefaultTableModel();
         table.setModel(tableModel);
 
-        loadCategoryData(); // Kategori verilerini yükle
+        loadCategoryData();
         loadTableData();
 
         productField.getDocument().addDocumentListener(new DocumentListener() {
@@ -70,23 +79,17 @@ public class AdminAccessForm extends JFrame {
             }
         });
 
-        categoryCbx.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    String selectedCategory = categoryCbx.getSelectedItem().toString();
-                    if ("All Categories".equals(selectedCategory)) {
-                        // Eğer "All Categories" seçildiyse, tüm ürünleri göster
-                        updateProductsByCategory(null); // null kategori için
-                    } else {
-                        // Seçilen kategoriye göre ürünleri göster
-                        updateProductsByCategory(selectedCategory);
-                    }
+        categoryCbx.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                String selectedCategory = categoryCbx.getSelectedItem().toString();
+                if ("All Categories".equals(selectedCategory)) {
+                    updateProductsByCategory(null);
+                } else {
+                    updateProductsByCategory(selectedCategory);
                 }
             }
         });
 
-        // "All Categories" seçeneğini ekleyin
         categoryCbx.addItem("All Categories");
     }
 
@@ -149,7 +152,8 @@ public class AdminAccessForm extends JFrame {
                 String unit = resultSet.getString("unit");
                 String place = resultSet.getString("place");
 
-                tableModel.addRow(new Object[]{id, category, name, price, unit, place});
+                Object[] row = {id, category, name, price, unit, place};
+                tableModel.addRow(row);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -165,11 +169,9 @@ public class AdminAccessForm extends JFrame {
             PreparedStatement statement;
 
             if (selectedCategory == null) {
-                // Tüm kategoriler için
                 query = "SELECT * FROM Products";
                 statement = connection.prepareStatement(query);
             } else {
-                // Belirli kategori için
                 query = "SELECT * FROM Products WHERE category = ?";
                 statement = connection.prepareStatement(query);
                 statement.setString(1, selectedCategory);
@@ -185,10 +187,25 @@ public class AdminAccessForm extends JFrame {
                 String unit = resultSet.getString("unit");
                 String place = resultSet.getString("place");
 
-                tableModel.addRow(new Object[]{id, category, name, price, unit, place});
+                Object[] row = {id, category, name, price, unit, place};
+                tableModel.addRow(row);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private boolean deleteProductFromDatabase(int productId) {
+        Connection connection = DatabaseConnection.connectToDatabase();
+        try {
+            String query = "DELETE FROM Products WHERE id = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, productId);
+            int rowsDeleted = statement.executeUpdate();
+            return rowsDeleted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
