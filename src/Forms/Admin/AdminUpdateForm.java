@@ -20,6 +20,7 @@ public class AdminUpdateForm extends JFrame {
     private JTextField placeField;
     private JButton updateButton;
     private JButton backButton;
+    private JLabel messageLabel;
 
     private int productIdToUpdate; // Güncellenecek ürünün ID'sini saklamak için
 
@@ -41,19 +42,26 @@ public class AdminUpdateForm extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Formdaki bilgileri al
-                String updatedProductName = productField.getText();
-                String updatedCategory = categoryCbx.getSelectedItem().toString();
-                double updatedPrice = Double.parseDouble(priceField.getText());
-                String updatedUnit = unitField.getText();
-                String updatedPlace = placeField.getText();
+                if (isInputValid()) {
+                    String updatedProductName = productField.getText();
+                    String updatedCategory = categoryCbx.getSelectedItem().toString();
+                    double updatedPrice = Double.parseDouble(priceField.getText());
+                    int updatedUnit = Integer.parseInt(unitField.getText());
+                    String updatedPlace = placeField.getText();
 
-                // Veritabanında güncelleme yap
-                if (updateProductInDatabase(productIdToUpdate, updatedProductName, updatedCategory, updatedPrice, updatedUnit, updatedPlace)) {
-                    // Güncelleme işlemi başarılı, formu kapatın
-                    dispose();
-                } else {
-                    // Güncelleme işlemi başarısız, hata mesajı verilebilir
-                    JOptionPane.showMessageDialog(AdminUpdateForm.this, "Ürün güncelleme başarısız!", "Hata", JOptionPane.ERROR_MESSAGE);
+                    // Veritabanında güncelleme yap
+                    if (updateProductInDatabase(productIdToUpdate, updatedProductName, updatedCategory, updatedPrice, updatedUnit, updatedPlace)) {
+                        // Güncelleme işlemi başarılı, formu kapatın
+                        JOptionPane.showMessageDialog(AdminUpdateForm.this,
+                                "Successfully updated the product!",
+                                "Update Product",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        AdminAccessForm adminAccessForm = new AdminAccessForm();// Pencereyi kapat
+                        dispose();
+                    } else {
+                        // Güncelleme işlemi başarısız, hata mesajı verilebilir
+                        JOptionPane.showMessageDialog(AdminUpdateForm.this, "Ürün güncelleme başarısız!", "Hata", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         });
@@ -86,6 +94,30 @@ public class AdminUpdateForm extends JFrame {
             e.printStackTrace();
         }
     }
+    private boolean isInputValid() {
+        String updatedProductName = productField.getText();
+        String updatedCategory = categoryCbx.getSelectedItem().toString();
+        String updatedPrice = priceField.getText();
+        String updatedUnit = unitField.getText();
+        String updatedPlace = placeField.getText();
+
+        if (updatedProductName.isEmpty() || updatedCategory.isEmpty() || updatedPrice.isEmpty() || updatedUnit.isEmpty()) {
+            messageLabel.setText("Please fill all the fields!");
+            messageLabel.setForeground(Color.RED);
+            return false;
+        }
+
+        try {
+            Double.parseDouble(updatedPrice);
+            Integer.parseInt(updatedUnit);
+        } catch (NumberFormatException e) {
+            messageLabel.setText("Price and Unit must be valid numbers.");
+            messageLabel.setForeground(Color.RED);
+            return false;
+        }
+
+        return true;
+    }
 
     private void loadProductData(int productId) {
         Connection connection = DatabaseConnection.connectToDatabase(); // Veritabanı bağlantısını oluşturun
@@ -115,7 +147,7 @@ public class AdminUpdateForm extends JFrame {
         }
     }
 
-    private boolean updateProductInDatabase(int productId, String updatedProductName, String updatedCategory, double updatedPrice, String updatedUnit, String updatedPlace) {
+    private boolean updateProductInDatabase(int productId, String updatedProductName, String updatedCategory, double updatedPrice, int updatedUnit, String updatedPlace) {
         Connection connection = DatabaseConnection.connectToDatabase(); // Veritabanı bağlantısını oluşturun
 
         try {
@@ -124,7 +156,7 @@ public class AdminUpdateForm extends JFrame {
             statement.setString(1, updatedProductName);
             statement.setString(2, updatedCategory);
             statement.setDouble(3, updatedPrice);
-            statement.setString(4, updatedUnit);
+            statement.setInt(4, updatedUnit);
             statement.setString(5, updatedPlace);
             statement.setInt(6, productId);
             int rowsUpdated = statement.executeUpdate();
