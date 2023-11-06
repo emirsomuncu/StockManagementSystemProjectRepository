@@ -24,7 +24,7 @@ public class AdminUpdateForm extends JFrame {
     private int productIdToUpdate; // Güncellenecek ürünün ID'sini saklamak için
 
     public AdminUpdateForm(int productId) {
-        this.productIdToUpdate = productId; // Güncellenecek ürünün ID'sini al
+        this.productIdToUpdate = productId; // Güncellenecek ürünün ID'sini all
 
         setTitle("Update Page");
         setContentPane(panel1);
