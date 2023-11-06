@@ -50,7 +50,7 @@ public class AdminAccessForm extends JFrame {
                         tableModel.removeRow(selectedRow);
                     }
                 } else {
-                    // İlgili işlemi hata durumu için burada yapabilirsiniz.
+                    // İlgili işlemi hata durumu için burada yapabilirsiniz. D
                 }
             }
         });
