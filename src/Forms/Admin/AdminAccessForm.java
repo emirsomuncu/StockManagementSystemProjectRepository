@@ -27,13 +27,13 @@ public class AdminAccessForm extends JFrame {
     public AdminAccessForm() {
         setTitle("Admin Main Page");
         setContentPane(adminDashboardJP);
-        setMinimumSize(new Dimension(700, 500));
+        setMinimumSize(new Dimension(800, 600));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
 
         addButton.addActionListener(e -> {
-            AdminAddForm adminAddForm = new AdminAddForm();
+            AdminAddForm adminAddForm = new AdminAddForm(tableModel);
             dispose();
         });
 
