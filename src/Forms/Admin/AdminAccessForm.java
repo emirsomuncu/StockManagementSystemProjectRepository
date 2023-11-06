@@ -90,11 +90,11 @@ public class AdminAccessForm extends JFrame {
     private void loadCategoryData() {
         Connection connection = DatabaseConnection.connectToDatabase();
         try {
-            String query = "SELECT DISTINCT category FROM Products";
+            String query = "SELECT DISTINCT Category FROM Products";
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                String category = resultSet.getString("category");
+                String category = resultSet.getString("Category");
                 categoryCbx.addItem(category);
             }
         } catch (SQLException e) {
