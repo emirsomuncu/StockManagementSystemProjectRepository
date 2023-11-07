@@ -68,7 +68,7 @@ public class UserLoginForm extends JFrame {
                             boolean loggedIn = get();
                             if (loggedIn) {
                                 System.out.println("Successfully logged in.");
-                                WelcomePageForm welcomePageForm = new WelcomePageForm();
+                                UserAccessForm userAccessForm = new UserAccessForm();
                                 dispose();
                             } else {
                                 messageLabel.setText("Invalid email or password.");

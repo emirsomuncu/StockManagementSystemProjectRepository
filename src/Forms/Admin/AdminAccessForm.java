@@ -1,5 +1,7 @@
 package Forms.Admin;
 import Database.DbHelper;
+import Forms.Welcome.WelcomePageForm;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -21,6 +23,7 @@ public class AdminAccessForm extends JFrame {
     private JButton addButton;
     private JButton updateButton;
     private JButton infoButton;
+    private JButton backButton;
     private DefaultTableModel tableModel;
     public AdminAccessForm() {
         setTitle("Admin Main Page");
@@ -110,6 +113,14 @@ public class AdminAccessForm extends JFrame {
                             "Important information about the Admin page",
                             JOptionPane.INFORMATION_MESSAGE);
                 }
+            }
+        });
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                WelcomePageForm welcomePageForm = new WelcomePageForm();
+                dispose();
             }
         });
     }
