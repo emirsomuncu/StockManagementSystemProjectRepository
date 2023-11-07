@@ -47,6 +47,8 @@
           <grid row="6" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
+          <background color="-16056561"/>
+          <foreground color="-1"/>
           <text value="Login"/>
         </properties>
       </component>
@@ -55,6 +57,8 @@
           <grid row="6" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
+          <background color="-16776987"/>
+          <foreground color="-1"/>
           <text value="Register"/>
         </properties>
       </component>
@@ -99,6 +103,9 @@
           <grid row="8" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
+          <background color="-45056"/>
+          <enabled value="true"/>
+          <foreground color="-1"/>
           <text value="Back"/>
         </properties>
       </component>

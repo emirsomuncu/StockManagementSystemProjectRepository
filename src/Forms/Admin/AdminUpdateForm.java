@@ -1,6 +1,6 @@
 package Forms.Admin;
 
-import Core.DatabaseConnection;
+import Database.DbHelper;
 
 import javax.swing.*;
 import java.awt.*;
@@ -78,7 +78,7 @@ public class AdminUpdateForm extends JFrame {
     }
 
     private void loadCategories() {
-        Connection connection = DatabaseConnection.connectToDatabase();
+        Connection connection = DbHelper.connectToDatabase();
         categoryCbx.removeAllItems(); // Mevcut öğeleri temizle
 
         try {
@@ -120,7 +120,7 @@ public class AdminUpdateForm extends JFrame {
     }
 
     private void loadProductData(int productId) {
-        Connection connection = DatabaseConnection.connectToDatabase(); // Veritabanı bağlantısını oluşturun
+        Connection connection = DbHelper.connectToDatabase(); // Veritabanı bağlantısını oluşturun
 
         try {
             String query = "SELECT * FROM Products WHERE id = ?";
@@ -148,7 +148,7 @@ public class AdminUpdateForm extends JFrame {
     }
 
     private boolean updateProductInDatabase(int productId, String updatedProductName, String updatedCategory, double updatedPrice, int updatedUnit, String updatedPlace) {
-        Connection connection = DatabaseConnection.connectToDatabase(); // Veritabanı bağlantısını oluşturun
+        Connection connection = DbHelper.connectToDatabase(); // Veritabanı bağlantısını oluşturun
 
         try {
             String query = "UPDATE Products SET name=?, category=?, price=?, unit=?, place=? WHERE id=?";

@@ -1,6 +1,6 @@
 package Forms.Admin;
 
-import Core.DatabaseConnection;
+import Database.DbHelper;
 
 import javax.swing.*;
 import java.awt.*;
@@ -67,14 +67,17 @@ public class AdminAddForm extends JFrame {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AdminAccessForm adminAccessForm = new AdminAccessForm();
-                dispose(); // Pencereyi kapat
+                Object source = e.getSource();
+                if(source == backButton) {
+                    AdminAccessForm adminAccessForm = new AdminAccessForm();
+                    dispose();
+                }
             }
         });
     }
 
     private void loadCategories() {
-        Connection connection = DatabaseConnection.connectToDatabase();
+        Connection connection = DbHelper.connectToDatabase();
         categoryCbx.removeAllItems(); // Mevcut öğeleri temizle
 
         try {
@@ -116,7 +119,7 @@ public class AdminAddForm extends JFrame {
     }
 
     private boolean addProductToDatabase(String name, String category, double price, int unit, String place) {
-        Connection connection = DatabaseConnection.connectToDatabase();
+        Connection connection = DbHelper.connectToDatabase();
         try {
             String query = "INSERT INTO Products (name, category, price, unit, place) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);

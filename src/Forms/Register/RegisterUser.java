@@ -1,11 +1,15 @@
 package Forms.Register;
-
-import Forms.Welcome.WelcomePageForm;
+import Database.DbHelper;
+import Forms.User.UserLoginForm;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class RegisterUser extends JFrame {
     private JPanel registerPanel;
@@ -28,43 +32,58 @@ public class RegisterUser extends JFrame {
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Object source = e.getSource();
-                if (source == registerButton) {
-                    // Get the name, email, password and confirm password from the text fields
-                    String name = nameField.getText();
-                    String email = emailField.getText();
-                    String password = new String(passwordField.getPassword());
-                    String confirmPassword = new String(conPassField.getPassword());
+                String name = nameField.getText();
+                String email = emailField.getText();
+                String password = new String(passwordField.getPassword());
+                String confirmPassword = new String(conPassField.getPassword());
 
-                    // Check if the name, email, password and confirm password are not empty
-                    if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-                        // If any of them is empty, display an error message and return
-                        messageLabel.setText("Please fill all the fields!");
-                        messageLabel.setForeground(Color.RED);
-                        return;
-                    }
-                    if (!password.equals(confirmPassword)) {
-                        // If they are not the same, display an error message and return
-                        messageLabel.setText("Passwords do not match!");
-                        messageLabel.setForeground(Color.RED);
-                        return;
-                    }
+                if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+                    messageLabel.setText("Please fill all the fields!");
+                    messageLabel.setForeground(Color.RED);
+                    return;
+                }
+                if (!password.equals(confirmPassword)) {
+                    messageLabel.setText("Passwords do not match!");
+                    messageLabel.setForeground(Color.RED);
+                    return;
                 }
 
+                try {
+                    Connection connection = DbHelper.connectToDatabase();
+
+                    String insertQuery = "INSERT INTO Users (name, email, password) VALUES (?, ?, ?)";
+                    PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
+                    preparedStatement.setString(1, name);
+                    preparedStatement.setString(2, email);
+                    preparedStatement.setString(3, password);
+
+                    int rowsAffected = preparedStatement.executeUpdate();
+                    if (rowsAffected > 0) {
+                        messageLabel.setText("User registered successfully!");
+                        messageLabel.setForeground(Color.GREEN);
+                    } else {
+                        messageLabel.setText("User registration failed!");
+                        messageLabel.setForeground(Color.RED);
+                    }
+
+                    preparedStatement.close();
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    messageLabel.setText("Database connection error");
+                    messageLabel.setForeground(Color.RED);
+                }
             }
         });
+
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Object source = e.getSource();
-                if (source == backButton) {
-                    // Create an instance of the LoginForm class
-                    WelcomePageForm welcomePageForm = new WelcomePageForm();
-
-                    // Dispose the current frame
+                if(source == backButton) {
+                    UserLoginForm userLoginForm = new UserLoginForm();
                     dispose();
                 }
-
             }
         });
     }

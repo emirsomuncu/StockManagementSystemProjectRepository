@@ -1,6 +1,6 @@
 package Forms.Admin;
 
-import Core.DatabaseConnection;
+import Database.DbHelper;
 import Forms.Welcome.WelcomePageForm;
 
 import javax.swing.*;
@@ -38,7 +38,7 @@ public class AdminLoginForm extends JFrame {
                         String password = new String(passwordChars);
                         //String password = new String(passwordChars);
 
-                        Connection connection = DatabaseConnection.connectToDatabase();
+                        Connection connection = DbHelper.connectToDatabase();
 
                         String query = "SELECT * FROM Admins WHERE Name = ? AND Password = ?";
                         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {

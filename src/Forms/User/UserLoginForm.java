@@ -1,6 +1,6 @@
 package Forms.User;
 
-import Core.DatabaseConnection;
+import Database.DbHelper;
 import Forms.Register.RegisterUser;
 import Forms.Welcome.WelcomePageForm;
 
@@ -33,16 +33,16 @@ public class UserLoginForm extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loginButton.setEnabled(false); // Butonun etkisizleştirilmesi
+                loginButton.setEnabled(false); // this deactivates the loginButton
 
-                SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
+                SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() { //SwingWorker is used here to speed this up a bit
                     @Override
                     protected Boolean doInBackground() throws Exception {
                         String email = emailField.getText();
                         char[] passwordChars = passwordField.getPassword();
                         String password = new String(passwordChars);
 
-                        Connection connection = DatabaseConnection.connectToDatabase();
+                        Connection connection = DbHelper.connectToDatabase();
 
                         String query = "SELECT * FROM Users WHERE Email = ? AND Password = ?";
                         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -78,12 +78,12 @@ public class UserLoginForm extends JFrame {
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         } finally {
-                            loginButton.setEnabled(true); // Butonun tekrar etkinleştirilmesi
+                            loginButton.setEnabled(true); // this now activates the loginButton
                         }
                     }
                 };
 
-                worker.execute(); // SwingWorker'ı başlatma
+                worker.execute(); // executes and starts the process of SwingWorker
             }
         });
         registerButton.addActionListener(new ActionListener() {
@@ -108,5 +108,3 @@ public class UserLoginForm extends JFrame {
         });
     }
 }
-
-// loginForm.java

@@ -1,10 +1,12 @@
 package Forms.Admin;
-import Core.DatabaseConnection;
+import Database.DbHelper;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,6 +20,7 @@ public class AdminAccessForm extends JFrame {
     private JButton deleteButton;
     private JButton addButton;
     private JButton updateButton;
+    private JButton infoButton;
     private DefaultTableModel tableModel;
     public AdminAccessForm() {
         setTitle("Admin Main Page");
@@ -26,6 +29,7 @@ public class AdminAccessForm extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
+
         addButton.addActionListener(e -> {
             AdminAddForm adminAddForm = new AdminAddForm(tableModel);
             dispose();
@@ -51,9 +55,13 @@ public class AdminAccessForm extends JFrame {
                     int productId = (int) value;
                     if (deleteProductFromDatabase(productId)) {
                         tableModel.removeRow(selectedRow);
+                        JOptionPane.showMessageDialog(AdminAccessForm.this,
+                                "Successfully deleted the product!",
+                                "Remove Product",
+                                JOptionPane.INFORMATION_MESSAGE);
                     }
                 } else {
-                    // İlgili işlemi hata durumu için burada yapabilirsiniz. D
+
                 }
             }
         });
@@ -86,9 +94,27 @@ public class AdminAccessForm extends JFrame {
             }
         });
         categoryCbx.addItem("All Categories");
+
+        infoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object source = e.getSource();
+                if(source == infoButton) {
+                    JOptionPane.showMessageDialog(AdminAccessForm.this,
+                            "Welcome to the Admin's page! Here is a guide on how to use our system." +
+                                    "\n 1- You can check the categories by simply clicking on which category you want to see." +
+                                    "\n 2- You can check each stock by typing their product names on the given field." +
+                                    "\n 3- To Add a stock, you simply have to click the Add button at the bottom of the screen and enter the informatiob of the stock." +
+                                    "\n 4- To Update a stock, click on the stock you want to update from the table and then click the Update button at the bottom of the screen." +
+                                    "\n 5- To Delete a stock, simply click on the stock you want to delete from the table and then click the Delete button at the bottom of the screen.",
+                            "Important information about the Admin page",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
     }
     private void loadCategoryData() {
-        Connection connection = DatabaseConnection.connectToDatabase();
+        Connection connection = DbHelper.connectToDatabase();
         try {
             String query = "SELECT DISTINCT Category FROM Products";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -102,7 +128,7 @@ public class AdminAccessForm extends JFrame {
         }
     }
     private void loadTableData() {
-        Connection connection = DatabaseConnection.connectToDatabase();
+        Connection connection = DbHelper.connectToDatabase();
         try {
             String query = "SELECT * FROM Products";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -124,7 +150,7 @@ public class AdminAccessForm extends JFrame {
     }
     private void searchProducts(String searchTerm) {
         tableModel.setRowCount(0);
-        Connection connection = DatabaseConnection.connectToDatabase();
+        Connection connection = DbHelper.connectToDatabase();
         try {
             String query = "SELECT * FROM Products WHERE name LIKE ?";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -146,7 +172,7 @@ public class AdminAccessForm extends JFrame {
     }
     private void updateProductsByCategory(String selectedCategory) {
         tableModel.setRowCount(0);
-        Connection connection = DatabaseConnection.connectToDatabase();
+        Connection connection = DbHelper.connectToDatabase();
         try {
             String query;
             PreparedStatement statement;
@@ -174,7 +200,7 @@ public class AdminAccessForm extends JFrame {
         }
     }
     private boolean deleteProductFromDatabase(int productId) {
-        Connection connection = DatabaseConnection.connectToDatabase();
+        Connection connection = DbHelper.connectToDatabase();
         try {
             String query = "DELETE FROM Products WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);

@@ -1,10 +1,10 @@
-package Core;
+package Database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DatabaseConnection {
+public class DbHelper {
     public static String USERNAME = "sql12658917";
     public static String PASSWORD = "gqSrjLqaQq";
     public static String DB_CONNECTION_URL = "jdbc:mysql://sql12.freemysqlhosting.net:3306/sql12658917";
