@@ -22,6 +22,7 @@ public class AdminAddForm extends JFrame {
     private JButton addButton;
     private JButton backButton;
     private JLabel messageLabel;
+    private JTextField barcodeField;
 
     private DefaultTableModel tableModel;
 
@@ -46,8 +47,9 @@ public class AdminAddForm extends JFrame {
                     double price = Double.parseDouble(priceField.getText());
                     int unit = Integer.parseInt(unitField.getText());
                     String place = placeField.getText();
+                    int barcode = Integer.parseInt(barcodeField.getText());
 
-                    if (addProductToDatabase(name, category, price, unit, place)) {
+                    if (addProductToDatabase(name, category, price, unit, place, barcode)) {
                         // Başarılı bir şekilde ürün eklendiyse tabloya ekle
                         tableModel.addRow(new Object[]{name, category, price, unit, place});
                         JOptionPane.showMessageDialog(AdminAddForm.this,
@@ -98,7 +100,9 @@ public class AdminAddForm extends JFrame {
         String name = productField.getText();
         String priceText = priceField.getText();
         String unitText = unitField.getText();
+        String barcodeText = barcodeField.getText();
         String place = placeField.getText();
+
 
         if (name.isEmpty() || priceText.isEmpty() || unitText.isEmpty() || place.isEmpty()) {
             messageLabel.setText("Please fill all the fields!");
@@ -109,8 +113,9 @@ public class AdminAddForm extends JFrame {
         try {
             Double.parseDouble(priceText);
             Integer.parseInt(unitText);
+            Integer.parseInt(barcodeText);
         } catch (NumberFormatException e) {
-            messageLabel.setText("Price and Unit must be valid numbers.");
+            messageLabel.setText("Price, Unit and Barcode must be valid numbers.");
             messageLabel.setForeground(Color.RED);
             return false;
         }
@@ -118,16 +123,17 @@ public class AdminAddForm extends JFrame {
         return true;
     }
 
-    private boolean addProductToDatabase(String name, String category, double price, int unit, String place) {
+    private boolean addProductToDatabase(String name, String category, double price, int unit, String place, int barcode) {
         Connection connection = DbHelper.connectToDatabase();
         try {
-            String query = "INSERT INTO Products (name, category, price, unit, place) VALUES (?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Products (name, category, price, unit, place, barcode) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, name);
             statement.setString(2, category);
             statement.setDouble(3, price);
             statement.setInt(4, unit);
             statement.setString(5, place);
+            statement.setInt(6, barcode);
 
             int rowsInserted = statement.executeUpdate();
             return rowsInserted > 0;

@@ -1,5 +1,6 @@
 package Forms.Admin;
 import Database.DbHelper;
+import Forms.User.UserAccessForm;
 import Forms.Welcome.WelcomePageForm;
 
 import javax.swing.*;
@@ -118,9 +119,18 @@ public class AdminAccessForm extends JFrame {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int result = JOptionPane.showConfirmDialog(AdminAccessForm.this,
+                        "Are you sure you want to sign out?",
+                        "Sign out",
+                        JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.YES_OPTION) {
+                    JOptionPane.showMessageDialog(null, "Successfully signed out!");
+                    WelcomePageForm welcomePageForm = new WelcomePageForm();
+                    dispose();
+                }
+                else if (result == JOptionPane.NO_OPTION) {
 
-                WelcomePageForm welcomePageForm = new WelcomePageForm();
-                dispose();
+                }
             }
         });
     }

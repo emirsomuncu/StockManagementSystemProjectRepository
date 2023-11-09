@@ -28,7 +28,7 @@ public class AdminLoginForm extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loginButton.setEnabled(false); // Butonun etkisizleştirilmesi
+                loginButton.setEnabled(false);
 
                 SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
                     @Override
@@ -36,8 +36,6 @@ public class AdminLoginForm extends JFrame {
                         String Name = usernameField.getText();
                         char[] passwordChars = passwordField.getPassword(); // Şifreyi char[] olarak al
                         String password = new String(passwordChars);
-                        //String password = new String(passwordChars);
-
                         Connection connection = DbHelper.connectToDatabase();
 
                         String query = "SELECT * FROM Admins WHERE Name = ? AND Password = ?";
@@ -73,12 +71,12 @@ public class AdminLoginForm extends JFrame {
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         } finally {
-                            loginButton.setEnabled(true); // Butonun tekrar etkinleştirilmesi
+                            loginButton.setEnabled(true);
                         }
                     }
                 };
 
-                worker.execute(); // SwingWorker başlatma
+                worker.execute();
             }
         });
         backButton.addActionListener(new ActionListener() {
@@ -93,5 +91,3 @@ public class AdminLoginForm extends JFrame {
         });
     }
 }
-
-// loginForm.java

@@ -1,5 +1,6 @@
 package Forms.User;
 import Database.DbHelper;
+import Forms.Admin.AdminAddForm;
 import Forms.Welcome.WelcomePageForm;
 
 import javax.swing.*;
@@ -26,7 +27,7 @@ public class UserAccessForm extends JFrame {
     private DefaultTableModel tableModel;
 
     public UserAccessForm() {
-        setTitle("Admin Main Page");
+        setTitle("User Main Page");
         setContentPane(userAccessPanel);
         setMinimumSize(new Dimension(800, 600));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -78,8 +79,18 @@ public class UserAccessForm extends JFrame {
         welcomePageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                WelcomePageForm welcomePageForm = new WelcomePageForm();
-                dispose();
+                int result = JOptionPane.showConfirmDialog(UserAccessForm.this,
+                        "Are you sure you want to sign out?",
+                        "Sign out",
+                        JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.YES_OPTION) {
+                    JOptionPane.showMessageDialog(null, "Successfully signed out!");
+                    WelcomePageForm welcomePageForm = new WelcomePageForm();
+                    dispose();
+                }
+                else if (result == JOptionPane.NO_OPTION) {
+
+                }
             }
         });
     }

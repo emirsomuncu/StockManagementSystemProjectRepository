@@ -57,7 +57,7 @@
               <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-321273"/>
+              <background color="-6946561"/>
               <enabled value="true"/>
               <foreground color="-1"/>
               <text value="Admin Login"/>

@@ -21,6 +21,7 @@ public class AdminUpdateForm extends JFrame {
     private JButton updateButton;
     private JButton backButton;
     private JLabel messageLabel;
+    private JTextField barcodeField;
 
     private int productIdToUpdate; // Güncellenecek ürünün ID'sini saklamak için
 
@@ -48,9 +49,10 @@ public class AdminUpdateForm extends JFrame {
                     double updatedPrice = Double.parseDouble(priceField.getText());
                     int updatedUnit = Integer.parseInt(unitField.getText());
                     String updatedPlace = placeField.getText();
+                    int updatedBarcode = Integer.parseInt(barcodeField.getText());
 
                     // Veritabanında güncelleme yap
-                    if (updateProductInDatabase(productIdToUpdate, updatedProductName, updatedCategory, updatedPrice, updatedUnit, updatedPlace)) {
+                    if (updateProductInDatabase(productIdToUpdate, updatedProductName, updatedCategory, updatedPrice, updatedUnit, updatedPlace, updatedBarcode)) {
                         // Güncelleme işlemi başarılı, formu kapatın
                         JOptionPane.showMessageDialog(AdminUpdateForm.this,
                                 "Successfully updated the product!",
@@ -100,6 +102,7 @@ public class AdminUpdateForm extends JFrame {
         String updatedPrice = priceField.getText();
         String updatedUnit = unitField.getText();
         String updatedPlace = placeField.getText();
+        String updatedBarcode = barcodeField.getText();
 
         if (updatedProductName.isEmpty() || updatedCategory.isEmpty() || updatedPrice.isEmpty() || updatedUnit.isEmpty()) {
             messageLabel.setText("Please fill all the fields!");
@@ -110,8 +113,9 @@ public class AdminUpdateForm extends JFrame {
         try {
             Double.parseDouble(updatedPrice);
             Integer.parseInt(updatedUnit);
+            Integer.parseInt(updatedBarcode);
         } catch (NumberFormatException e) {
-            messageLabel.setText("Price and Unit must be valid numbers.");
+            messageLabel.setText("Price, Unit and Barcode must be valid numbers.");
             messageLabel.setForeground(Color.RED);
             return false;
         }
@@ -133,32 +137,35 @@ public class AdminUpdateForm extends JFrame {
                 String productName = resultSet.getString("name");
                 String category = resultSet.getString("category");
                 double price = resultSet.getDouble("price");
-                String unit = resultSet.getString("unit");
+                int unit = resultSet.getInt("unit");
                 String place = resultSet.getString("place");
+                int barcode = resultSet.getInt("barcode");
 
                 productField.setText(productName);
                 categoryCbx.setSelectedItem(category);
                 priceField.setText(String.valueOf(price));
-                unitField.setText(unit);
+                unitField.setText(String.valueOf(unit));
                 placeField.setText(place);
+                barcodeField.setText(String.valueOf(barcode));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private boolean updateProductInDatabase(int productId, String updatedProductName, String updatedCategory, double updatedPrice, int updatedUnit, String updatedPlace) {
+    private boolean updateProductInDatabase(int productId, String updatedProductName, String updatedCategory, double updatedPrice, int updatedUnit, String updatedPlace, int updatedBarcode) {
         Connection connection = DbHelper.connectToDatabase(); // Veritabanı bağlantısını oluşturun
 
         try {
-            String query = "UPDATE Products SET name=?, category=?, price=?, unit=?, place=? WHERE id=?";
+            String query = "UPDATE Products SET name=?, category=?, price=?, unit=?, place=?, barcode=? WHERE id=?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, updatedProductName);
             statement.setString(2, updatedCategory);
             statement.setDouble(3, updatedPrice);
             statement.setInt(4, updatedUnit);
             statement.setString(5, updatedPlace);
-            statement.setInt(6, productId);
+            statement.setInt(6, updatedBarcode);
+            statement.setInt(7, productId);
             int rowsUpdated = statement.executeUpdate();
             return rowsUpdated > 0;
         } catch (SQLException e) {
