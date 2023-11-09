@@ -153,8 +153,9 @@ public class UserAccessForm extends JFrame {
                 double price = resultSet.getDouble("price");
                 String unit = resultSet.getString("unit");
                 String place = resultSet.getString("place");
+                String barcode = resultSet.getString("barcode");
 
-                tableModel.addRow(new Object[]{id, category, name, price, unit, place});
+                tableModel.addRow(new Object[]{id, category, name, price, unit, place, barcode});
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -189,8 +190,9 @@ public class UserAccessForm extends JFrame {
                 double price = resultSet.getDouble("price");
                 String unit = resultSet.getString("unit");
                 String place = resultSet.getString("place");
+                String barcode = resultSet.getString("barcode");
 
-                tableModel.addRow(new Object[]{id, category, name, price, unit, place});
+                tableModel.addRow(new Object[]{id, category, name, price, unit, place, barcode});
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -184,7 +184,8 @@ public class AdminAccessForm extends JFrame {
                 double price = resultSet.getDouble("price");
                 String unit = resultSet.getString("unit");
                 String place = resultSet.getString("place");
-                Object[] row = {id, category, name, price, unit, place};
+                String barcode = resultSet.getString("barcode");
+                Object[] row = {id, category, name, price, unit, place, barcode};
                 tableModel.addRow(row);
             }
         } catch (SQLException e) {
@@ -213,7 +214,8 @@ public class AdminAccessForm extends JFrame {
                 double price = resultSet.getDouble("price");
                 String unit = resultSet.getString("unit");
                 String place = resultSet.getString("place");
-                Object[] row = {id, category, name, price, unit, place};
+                String barcode = resultSet.getString("barcode");
+                Object[] row = {id, category, name, price, unit, place, barcode};
                 tableModel.addRow(row);
             }
         } catch (SQLException e) {
