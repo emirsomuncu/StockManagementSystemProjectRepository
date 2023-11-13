@@ -75,7 +75,7 @@ public class UserAccessForm extends JFrame {
         });
 
         // "All Categories" seçeneğini ekleyin
-        categoryCbx.addItem("All Categories");
+        categoryCbx.addItem("All Categories"); //
         welcomePageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

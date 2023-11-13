@@ -105,5 +105,5 @@ public class UserFeedbackForm extends JFrame {
             return false;
         }
         return true;
-    }
+    } //end of feedbackIsValid
 }

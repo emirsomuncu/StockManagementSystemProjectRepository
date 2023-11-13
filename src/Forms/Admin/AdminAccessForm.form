@@ -113,14 +113,6 @@
           <text value=""/>
         </properties>
       </component>
-      <component id="2c2b4" class="javax.swing.JButton" binding="backButton">
-        <constraints>
-          <grid row="10" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Sign Out"/>
-        </properties>
-      </component>
       <scrollpane id="79eb0">
         <constraints>
           <grid row="5" column="1" row-span="2" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -138,6 +130,19 @@
           </component>
         </children>
       </scrollpane>
+      <component id="2c2b4" class="javax.swing.JButton" binding="backButton">
+        <constraints>
+          <grid row="10" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Sign Out"/>
+        </properties>
+      </component>
+      <hspacer id="d1f2f">
+        <constraints>
+          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </hspacer>
     </children>
   </grid>
 </form>
