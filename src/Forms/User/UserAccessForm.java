@@ -22,6 +22,7 @@ public class UserAccessForm extends JFrame {
     private JTextField productField;
     private JTable table;
     private JButton welcomePageButton;
+    private JButton feedbackButton;
 
     private DefaultTableModel tableModel;
 
@@ -89,6 +90,16 @@ public class UserAccessForm extends JFrame {
                 }
                 else if (result == JOptionPane.NO_OPTION) {
 
+                }
+            }
+        });
+        feedbackButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object source = e.getSource();
+                if(source == feedbackButton) {
+                    UserFeedbackForm userFeedbackForm = new UserFeedbackForm();
+                    dispose();
                 }
             }
         });

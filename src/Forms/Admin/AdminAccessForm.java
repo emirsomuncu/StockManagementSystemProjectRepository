@@ -10,10 +10,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+
 public class AdminAccessForm extends JFrame {
     private JPanel adminDashboardJP;
     private JComboBox<String> categoryCbx;
@@ -24,6 +22,7 @@ public class AdminAccessForm extends JFrame {
     private JButton updateButton;
     private JButton infoButton;
     private JButton backButton;
+    private JScrollPane scrollPane;
     private DefaultTableModel tableModel;
     public AdminAccessForm() {
         setTitle("Admin Main Page");
@@ -32,6 +31,7 @@ public class AdminAccessForm extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
+
 
         addButton.addActionListener(e -> {
             AdminAddForm adminAddForm = new AdminAddForm(tableModel);
@@ -107,7 +107,7 @@ public class AdminAccessForm extends JFrame {
                             "Welcome to the Admin's page! Here is a guide on how to use our system." +
                                     "\n 1- You can check the categories by simply clicking on which category you want to see." +
                                     "\n 2- You can check each stock by typing their product names on the given field." +
-                                    "\n 3- To Add a stock, you simply have to click the Add button at the bottom of the screen and enter the informatiob of the stock." +
+                                    "\n 3- To Add a stock, you simply have to click the Add button at the bottom of the screen and enter the information of the stock." +
                                     "\n 4- To Update a stock, click on the stock you want to update from the table and then click the Update button at the bottom of the screen." +
                                     "\n 5- To Delete a stock, simply click on the stock you want to delete from the table and then click the Delete button at the bottom of the screen.",
                             "Important information about the Admin page",
@@ -168,6 +168,9 @@ public class AdminAccessForm extends JFrame {
             e.printStackTrace();
         }
     }
+
+
+
     private void searchProducts(String searchTerm) {
         tableModel.setRowCount(0);
         Connection connection = DbHelper.connectToDatabase();
