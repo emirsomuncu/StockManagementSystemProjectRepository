@@ -103,7 +103,7 @@ public class UserFeedbackForm extends JFrame {
             messageLabel.setText("Your phone number must contain valid numbers (Country code not included).");
             messageLabel.setForeground(Color.RED);
             return false;
-        }
+        } //end of catch
         return true;
     } //end of feedbackIsValid
 }

@@ -96,7 +96,7 @@ public class AdminAccessForm extends JFrame {
                 }
             }
         });
-        categoryCbx.addItem("All Categories"); //
+        categoryCbx.addItem("All Categories"); // push test
 
         infoButton.addActionListener(new ActionListener() {
             @Override
