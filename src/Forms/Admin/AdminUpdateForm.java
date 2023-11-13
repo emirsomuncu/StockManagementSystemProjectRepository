@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,6 +24,8 @@ public class AdminUpdateForm extends JFrame {
     private JButton backButton;
     private JLabel messageLabel;
     private JTextField barcodeField;
+    private JCheckBox productCheckBox;
+    private JRadioButton barcodeRadio;
 
     private int productIdToUpdate; // Güncellenecek ürünün ID'sini saklamak için
 
@@ -75,6 +79,29 @@ public class AdminUpdateForm extends JFrame {
                     AdminAccessForm adminAccessForm = new AdminAccessForm();
                     dispose();
                 }
+            }
+        });
+        productField.setEditable(false);
+        barcodeField.setEditable(false);
+
+        productCheckBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                // productCheckBox seçili olduğunda
+                productField.setEditable(true);
+            } else {
+                // productCheckBox seçili değilse
+                productField.setEditable(false);
+            }
+        });
+
+
+        barcodeRadio.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                // productCheckBox seçili olduğunda
+                barcodeField.setEditable(true);
+            } else {
+                // productCheckBox seçili değilse
+                barcodeField.setEditable(false);
             }
         });
     }

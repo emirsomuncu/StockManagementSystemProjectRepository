@@ -5,7 +5,10 @@ import Forms.Welcome.WelcomePageForm;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,7 +25,7 @@ public class AdminAccessForm extends JFrame {
     private JButton updateButton;
     private JButton infoButton;
     private JButton backButton;
-    private JScrollPane scrollPane;
+    private JTree tree1;
     private DefaultTableModel tableModel;
     public AdminAccessForm() {
         setTitle("Admin Main Page");
@@ -31,6 +34,26 @@ public class AdminAccessForm extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
+
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Admin Forms");
+        DefaultMutableTreeNode feedback = new DefaultMutableTreeNode("feedback");
+        root.add(feedback);
+        tree1.setModel(new JTree(root).getModel());
+
+        // JTree'de dosyalara tıklandığında formun açılmasını sağla
+        tree1.addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree1.getLastSelectedPathComponent();
+                if (selectedNode != null) {
+                    String selectedFile = selectedNode.toString();
+                     if ("feedback".equals(selectedFile)) {
+                        AdminFeedbackForm feedbackForm = new AdminFeedbackForm();
+                        dispose();
+                    }
+                }
+            }
+        });
 
 
         addButton.addActionListener(e -> {
