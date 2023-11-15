@@ -44,17 +44,17 @@ public class UserAccessForm extends JFrame {
         productField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                searchProducts(productField.getText());
+                searchStocks(productField.getText());
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                searchProducts(productField.getText());
+                searchStocks(productField.getText());
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                searchProducts(productField.getText());
+                searchStocks(productField.getText());
             }
         });
 
@@ -65,10 +65,10 @@ public class UserAccessForm extends JFrame {
                     String selectedCategory = categoryCbx.getSelectedItem().toString();
                     if ("All Categories".equals(selectedCategory)) {
                         // Eğer "All Categories" seçildiyse, tüm ürünleri göster
-                        updateProductsByCategory(null); // null kategori için
+                        updateStocksByCategory(null); // null kategori için
                     } else {
                         // Seçilen kategoriye göre ürünleri göster
-                        updateProductsByCategory(selectedCategory);
+                        updateStocksByCategory(selectedCategory);
                     }
                 }
             }
@@ -108,7 +108,7 @@ public class UserAccessForm extends JFrame {
     private void loadCategoryData() {
         Connection connection = DbHelper.connectToDatabase();
         try {
-            String query = "SELECT DISTINCT category FROM Products";
+            String query = "SELECT DISTINCT category FROM stocks";
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
 
@@ -125,7 +125,7 @@ public class UserAccessForm extends JFrame {
         Connection connection = DbHelper.connectToDatabase();
 
         try {
-            String query = "SELECT * FROM Products";
+            String query = "SELECT * FROM stocks";
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
 
@@ -146,12 +146,12 @@ public class UserAccessForm extends JFrame {
         }
     }
 
-    private void searchProducts(String searchTerm) {
+    private void searchStocks(String searchTerm) {
         tableModel.setRowCount(0);
 
         Connection connection = DbHelper.connectToDatabase();
         try {
-            String query = "SELECT * FROM Products WHERE name LIKE ?";
+            String query = "SELECT * FROM stocks WHERE name LIKE ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, "%" + searchTerm + "%");
             ResultSet resultSet = statement.executeQuery();
@@ -172,7 +172,7 @@ public class UserAccessForm extends JFrame {
         }
     }
 
-    private void updateProductsByCategory(String selectedCategory) {
+    private void updateStocksByCategory(String selectedCategory) {
         tableModel.setRowCount(0);
 
         Connection connection = DbHelper.connectToDatabase();
@@ -182,11 +182,11 @@ public class UserAccessForm extends JFrame {
 
             if (selectedCategory == null) {
                 // Tüm kategoriler için
-                query = "SELECT * FROM Products";
+                query = "SELECT * FROM stocks";
                 statement = connection.prepareStatement(query);
             } else {
                 // Belirli kategori için
-                query = "SELECT * FROM Products WHERE category = ?";
+                query = "SELECT * FROM stocks WHERE category = ?";
                 statement = connection.prepareStatement(query);
                 statement.setString(1, selectedCategory);
             }

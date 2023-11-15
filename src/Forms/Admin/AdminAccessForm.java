@@ -66,8 +66,8 @@ public class AdminAccessForm extends JFrame {
             if (selectedRow >= 0) {
                 Object value = tableModel.getValueAt(selectedRow, 0);
                 if (value instanceof Integer) {
-                    int productId = (int) value;
-                    AdminUpdateForm adminUpdateForm = new AdminUpdateForm(productId); // Ürün ID'sini iletebilirsiniz.
+                    int stockId = (int) value;
+                    AdminUpdateForm adminUpdateForm = new AdminUpdateForm(stockId); // Ürün ID'sini iletebilirsiniz.
                     dispose();
                 }
             }
@@ -78,12 +78,12 @@ public class AdminAccessForm extends JFrame {
             if (selectedRow >= 0) {
                 Object value = tableModel.getValueAt(selectedRow, 0);
                 if (value instanceof Integer) {
-                    int productId = (int) value;
-                    if (deleteProductFromDatabase(productId)) {
+                    int stockId = (int) value;
+                    if (deleteStockFromDatabase(stockId)) {
                         tableModel.removeRow(selectedRow);
                         JOptionPane.showMessageDialog(AdminAccessForm.this,
-                                "Successfully deleted the product!",
-                                "Remove Product",
+                                "Successfully deleted the stock!",
+                                "Remove Stock",
                                 JOptionPane.INFORMATION_MESSAGE);
                     }
                 } else {
@@ -98,24 +98,24 @@ public class AdminAccessForm extends JFrame {
         productField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                searchProducts(productField.getText());
+                searchStocks(productField.getText());
             }
             @Override
             public void removeUpdate(DocumentEvent e) {
-                searchProducts(productField.getText());
+                searchStocks(productField.getText());
             }
             @Override
             public void changedUpdate(DocumentEvent e) {
-                searchProducts(productField.getText());
+                searchStocks(productField.getText());
             }
         });
         categoryCbx.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 String selectedCategory = categoryCbx.getSelectedItem().toString();
                 if ("All Categories".equals(selectedCategory)) {
-                    updateProductsByCategory(null);
+                    updateStocksByCategory(null);
                 } else {
-                    updateProductsByCategory(selectedCategory);
+                    updateStocksByCategory(selectedCategory);
                 }
             }
         });
@@ -159,7 +159,7 @@ public class AdminAccessForm extends JFrame {
     private void loadCategoryData() {
         Connection connection = DbHelper.connectToDatabase();
         try {
-            String query = "SELECT DISTINCT Category FROM Products";
+            String query = "SELECT DISTINCT Category FROM stocks";
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -173,7 +173,7 @@ public class AdminAccessForm extends JFrame {
     private void loadTableData() {
         Connection connection = DbHelper.connectToDatabase();
         try {
-            String query = "SELECT * FROM Products";
+            String query = "SELECT * FROM stocks";
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
             int columnCount = resultSet.getMetaData().getColumnCount();
@@ -194,11 +194,11 @@ public class AdminAccessForm extends JFrame {
 
 
 
-    private void searchProducts(String searchTerm) {
+    private void searchStocks(String searchTerm) {
         tableModel.setRowCount(0);
         Connection connection = DbHelper.connectToDatabase();
         try {
-            String query = "SELECT * FROM Products WHERE name LIKE ?";
+            String query = "SELECT * FROM stocks WHERE name LIKE ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, "%" + searchTerm + "%");
             ResultSet resultSet = statement.executeQuery();
@@ -217,17 +217,17 @@ public class AdminAccessForm extends JFrame {
             e.printStackTrace();
         }
     }
-    private void updateProductsByCategory(String selectedCategory) {
+    private void updateStocksByCategory(String selectedCategory) {
         tableModel.setRowCount(0);
         Connection connection = DbHelper.connectToDatabase();
         try {
             String query;
             PreparedStatement statement;
             if (selectedCategory == null) {
-                query = "SELECT * FROM Products";
+                query = "SELECT * FROM stocks";
                 statement = connection.prepareStatement(query);
             } else {
-                query = "SELECT * FROM Products WHERE category = ?";
+                query = "SELECT * FROM stocks WHERE category = ?";
                 statement = connection.prepareStatement(query);
                 statement.setString(1, selectedCategory);
             }
@@ -247,12 +247,12 @@ public class AdminAccessForm extends JFrame {
             e.printStackTrace();
         }
     }
-    private boolean deleteProductFromDatabase(int productId) {
+    private boolean deleteStockFromDatabase(int stockId) {
         Connection connection = DbHelper.connectToDatabase();
         try {
-            String query = "DELETE FROM Products WHERE id = ?";
+            String query = "DELETE FROM stocks WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, productId);
+            statement.setInt(1, stockId);
             int rowsDeleted = statement.executeUpdate();
             return rowsDeleted > 0;
         } catch (SQLException e) {

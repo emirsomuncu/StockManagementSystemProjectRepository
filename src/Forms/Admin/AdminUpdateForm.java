@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,10 +26,10 @@ public class AdminUpdateForm extends JFrame {
     private JCheckBox productCheckBox;
     private JRadioButton barcodeRadio;
 
-    private int productIdToUpdate; // Güncellenecek ürünün ID'sini saklamak için
+    private int stockIdToUpdate; // Güncellenecek ürünün ID'sini saklamak için
 
-    public AdminUpdateForm(int productId) {
-        this.productIdToUpdate = productId; // Güncellenecek ürünün ID'sini all
+    public AdminUpdateForm(int stockId) {
+        this.stockIdToUpdate = stockId; // Güncellenecek ürünün ID'sini all
 
         setTitle("Update Page");
         setContentPane(panel1);
@@ -40,7 +39,7 @@ public class AdminUpdateForm extends JFrame {
         setVisible(true);
 
         // Ürünü veritabanından alın ve alanlara yerleştirin
-        loadProductData(productId);
+        loadStockData(stockId);
         loadCategories();
 
         updateButton.addActionListener(new ActionListener() {
@@ -56,11 +55,11 @@ public class AdminUpdateForm extends JFrame {
                     int updatedBarcode = Integer.parseInt(barcodeField.getText());
 
                     // Veritabanında güncelleme yap
-                    if (updateProductInDatabase(productIdToUpdate, updatedProductName, updatedCategory, updatedPrice, updatedUnit, updatedPlace, updatedBarcode)) {
+                    if (updateProductInDatabase(stockIdToUpdate, updatedProductName, updatedCategory, updatedPrice, updatedUnit, updatedPlace, updatedBarcode)) {
                         // Güncelleme işlemi başarılı, formu kapatın
                         JOptionPane.showMessageDialog(AdminUpdateForm.this,
-                                "Successfully updated the product!",
-                                "Update Product",
+                                "Successfully updated the stock!",
+                                "Update Stock",
                                 JOptionPane.INFORMATION_MESSAGE);
                         AdminAccessForm adminAccessForm = new AdminAccessForm();// Pencereyi kapat
                         dispose();
@@ -150,13 +149,13 @@ public class AdminUpdateForm extends JFrame {
         return true;
     }
 
-    private void loadProductData(int productId) {
+    private void loadStockData(int stockId) {
         Connection connection = DbHelper.connectToDatabase(); // Veritabanı bağlantısını oluşturun
 
         try {
-            String query = "SELECT * FROM Products WHERE id = ?";
+            String query = "SELECT * FROM stocks WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, productId);
+            statement.setInt(1, stockId);
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
@@ -180,11 +179,11 @@ public class AdminUpdateForm extends JFrame {
         }
     }
 
-    private boolean updateProductInDatabase(int productId, String updatedProductName, String updatedCategory, double updatedPrice, int updatedUnit, String updatedPlace, int updatedBarcode) {
+    private boolean updateProductInDatabase(int stockId, String updatedProductName, String updatedCategory, double updatedPrice, int updatedUnit, String updatedPlace, int updatedBarcode) {
         Connection connection = DbHelper.connectToDatabase(); // Veritabanı bağlantısını oluşturun
 
         try {
-            String query = "UPDATE Products SET name=?, category=?, price=?, unit=?, place=?, barcode=? WHERE id=?";
+            String query = "UPDATE stocks SET name=?, category=?, price=?, unit=?, place=?, barcode=? WHERE id=?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, updatedProductName);
             statement.setString(2, updatedCategory);
@@ -192,7 +191,7 @@ public class AdminUpdateForm extends JFrame {
             statement.setInt(4, updatedUnit);
             statement.setString(5, updatedPlace);
             statement.setInt(6, updatedBarcode);
-            statement.setInt(7, productId);
+            statement.setInt(7, stockId);
             int rowsUpdated = statement.executeUpdate();
             return rowsUpdated > 0;
         } catch (SQLException e) {

@@ -49,17 +49,17 @@ public class AdminAddForm extends JFrame {
                     String place = placeField.getText();
                     int barcode = Integer.parseInt(barcodeField.getText());
 
-                    if (addProductToDatabase(name, category, price, unit, place, barcode)) {
+                    if (addStockToDatabase(name, category, price, unit, place, barcode)) {
                         // Başarılı bir şekilde ürün eklendiyse tabloya ekle
                         tableModel.addRow(new Object[]{name, category, price, unit, place});
                         JOptionPane.showMessageDialog(AdminAddForm.this,
-                                "Successfully added the product!",
-                                "New Product",
+                                "Successfully added the stock!",
+                                "New Stock",
                                 JOptionPane.INFORMATION_MESSAGE);
                         AdminAccessForm adminAccessForm = new AdminAccessForm();
                         dispose(); // Pencereyi kapat
                     } else {
-                        messageLabel.setText("Failed to add the product.");
+                        messageLabel.setText("Failed to add the stock.");
                         messageLabel.setForeground(Color.RED);
                     }
                 }
@@ -123,10 +123,10 @@ public class AdminAddForm extends JFrame {
         return true;
     }
 
-    private boolean addProductToDatabase(String name, String category, double price, int unit, String place, int barcode) {
+    private boolean addStockToDatabase(String name, String category, double price, int unit, String place, int barcode) {
         Connection connection = DbHelper.connectToDatabase();
         try {
-            String query = "INSERT INTO Products (name, category, price, unit, place, barcode) VALUES (?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO stocks (name, category, price, unit, place, barcode) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, name);
             statement.setString(2, category);
