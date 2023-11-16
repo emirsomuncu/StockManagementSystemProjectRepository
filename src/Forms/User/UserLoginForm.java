@@ -33,9 +33,9 @@ public class UserLoginForm extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loginButton.setEnabled(false); // this deactivates the loginButton
+                loginButton.setEnabled(false);
 
-                SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() { //SwingWorker is used here to speed this up a bit
+                SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
                     @Override
                     protected Boolean doInBackground() throws Exception {
                         String email = emailField.getText();
@@ -67,7 +67,8 @@ public class UserLoginForm extends JFrame {
                         try {
                             boolean loggedIn = get();
                             if (loggedIn) {
-                                System.out.println("Successfully logged in.");
+                                messageLabel.setText("Successfully logged in!");
+                                messageLabel.setForeground(Color.GREEN);
                                 UserAccessForm userAccessForm = new UserAccessForm();
                                 dispose();
                             } else {
@@ -78,12 +79,12 @@ public class UserLoginForm extends JFrame {
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         } finally {
-                            loginButton.setEnabled(true); // this now activates the loginButton
+                            loginButton.setEnabled(true);
                         }
                     }
                 };
 
-                worker.execute(); // executes and starts the process of SwingWorker
+                worker.execute();
             }
         });
         registerButton.addActionListener(new ActionListener() {

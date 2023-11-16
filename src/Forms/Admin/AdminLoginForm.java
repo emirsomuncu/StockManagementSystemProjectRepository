@@ -34,7 +34,7 @@ public class AdminLoginForm extends JFrame {
                     @Override
                     protected Boolean doInBackground() throws Exception {
                         String Name = usernameField.getText();
-                        char[] passwordChars = passwordField.getPassword(); // Şifreyi char[] olarak al
+                        char[] passwordChars = passwordField.getPassword();
                         String password = new String(passwordChars);
                         Connection connection = DbHelper.connectToDatabase();
 

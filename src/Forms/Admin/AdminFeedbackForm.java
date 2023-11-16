@@ -30,7 +30,6 @@ public class AdminFeedbackForm extends JFrame {
         root.add(feedback);
         tree1.setModel(new JTree(root).getModel());
 
-        // JTable'da dosyalara tıklandığında formun açılmasını sağla
         tree1.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
@@ -45,7 +44,6 @@ public class AdminFeedbackForm extends JFrame {
             }
         });
 
-        // JTable için model oluştur
         tableModel = new DefaultTableModel();
         table.setModel(tableModel);
         loadTableData();
@@ -62,7 +60,7 @@ public class AdminFeedbackForm extends JFrame {
                     textArea.setLineWrap(true);
                     textArea.setWrapStyleWord(true);
                     JScrollPane scrollPane = new JScrollPane(textArea);
-                    scrollPane.setPreferredSize(new Dimension(800, 600));  // İstenilen boyutu ayarlayabilirsiniz
+                    scrollPane.setPreferredSize(new Dimension(800, 600));
 
                     JOptionPane.showMessageDialog(this, scrollPane, "Feedback Message", JOptionPane.INFORMATION_MESSAGE);
                 }

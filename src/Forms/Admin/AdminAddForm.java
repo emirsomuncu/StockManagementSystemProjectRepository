@@ -23,7 +23,6 @@ public class AdminAddForm extends JFrame {
     private JButton backButton;
     private JLabel messageLabel;
     private JTextField barcodeField;
-
     private DefaultTableModel tableModel;
 
     public AdminAddForm(DefaultTableModel tableModel) {
@@ -36,7 +35,7 @@ public class AdminAddForm extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
 
-        loadCategories(); // Kategorileri JComboBox'a yükle
+        loadCategories();
 
         addButton.addActionListener(new ActionListener() {
             @Override

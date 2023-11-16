@@ -26,10 +26,10 @@ public class AdminUpdateForm extends JFrame {
     private JCheckBox productCheckBox;
     private JRadioButton barcodeRadio;
 
-    private int stockIdToUpdate; // Güncellenecek ürünün ID'sini saklamak için
+    private int stockIdToUpdate;
 
     public AdminUpdateForm(int stockId) {
-        this.stockIdToUpdate = stockId; // Güncellenecek ürünün ID'sini all
+        this.stockIdToUpdate = stockId;
 
         setTitle("Update Page");
         setContentPane(panel1);
@@ -38,14 +38,12 @@ public class AdminUpdateForm extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
 
-        // Ürünü veritabanından alın ve alanlara yerleştirin
         loadStockData(stockId);
         loadCategories();
 
         updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Formdaki bilgileri al
                 if (isInputValid()) {
                     String updatedProductName = productField.getText();
                     String updatedCategory = categoryCbx.getSelectedItem().toString();
@@ -54,9 +52,7 @@ public class AdminUpdateForm extends JFrame {
                     String updatedPlace = placeField.getText();
                     int updatedBarcode = Integer.parseInt(barcodeField.getText());
 
-                    // Veritabanında güncelleme yap
                     if (updateProductInDatabase(stockIdToUpdate, updatedProductName, updatedCategory, updatedPrice, updatedUnit, updatedPlace, updatedBarcode)) {
-                        // Güncelleme işlemi başarılı, formu kapatın
                         JOptionPane.showMessageDialog(AdminUpdateForm.this,
                                 "Successfully updated the stock!",
                                 "Update Stock",
@@ -64,7 +60,6 @@ public class AdminUpdateForm extends JFrame {
                         AdminAccessForm adminAccessForm = new AdminAccessForm();// Pencereyi kapat
                         dispose();
                     } else {
-                        // Güncelleme işlemi başarısız, hata mesajı verilebilir
                         JOptionPane.showMessageDialog(AdminUpdateForm.this, "Ürün güncelleme başarısız!", "Hata", JOptionPane.ERROR_MESSAGE);
                     }
                 }
@@ -85,10 +80,8 @@ public class AdminUpdateForm extends JFrame {
 
         productCheckBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                // productCheckBox seçili olduğunda
                 productField.setEditable(true);
             } else {
-                // productCheckBox seçili değilse
                 productField.setEditable(false);
             }
         });
@@ -107,7 +100,7 @@ public class AdminUpdateForm extends JFrame {
 
     private void loadCategories() {
         Connection connection = DbHelper.connectToDatabase();
-        categoryCbx.removeAllItems(); // Mevcut öğeleri temizle
+        categoryCbx.removeAllItems();
 
         try {
             String query = "SELECT * FROM Category";
@@ -150,7 +143,7 @@ public class AdminUpdateForm extends JFrame {
     }
 
     private void loadStockData(int stockId) {
-        Connection connection = DbHelper.connectToDatabase(); // Veritabanı bağlantısını oluşturun
+        Connection connection = DbHelper.connectToDatabase();
 
         try {
             String query = "SELECT * FROM stocks WHERE id = ?";
@@ -159,7 +152,6 @@ public class AdminUpdateForm extends JFrame {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                // Veritabanından ürün bilgilerini çekin ve alanlara yerleştirin
                 String productName = resultSet.getString("name");
                 String category = resultSet.getString("category");
                 double price = resultSet.getDouble("price");
@@ -180,7 +172,7 @@ public class AdminUpdateForm extends JFrame {
     }
 
     private boolean updateProductInDatabase(int stockId, String updatedProductName, String updatedCategory, double updatedPrice, int updatedUnit, String updatedPlace, int updatedBarcode) {
-        Connection connection = DbHelper.connectToDatabase(); // Veritabanı bağlantısını oluşturun
+        Connection connection = DbHelper.connectToDatabase();
 
         try {
             String query = "UPDATE stocks SET name=?, category=?, price=?, unit=?, place=?, barcode=? WHERE id=?";
@@ -202,7 +194,7 @@ public class AdminUpdateForm extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            AdminUpdateForm adminUpdateForm = new AdminUpdateForm(1); // 1, güncellenecek ürünün ID'si
+            AdminUpdateForm adminUpdateForm = new AdminUpdateForm(1);
         });
     }
 }

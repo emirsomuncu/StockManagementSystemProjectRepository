@@ -38,7 +38,7 @@ public class UserAccessForm extends JFrame {
         tableModel = new DefaultTableModel();
         table.setModel(tableModel);
 
-        loadCategoryData(); // Kategori verilerini yükle
+        loadCategoryData();
         loadTableData();
 
         productField.getDocument().addDocumentListener(new DocumentListener() {
@@ -64,17 +64,14 @@ public class UserAccessForm extends JFrame {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     String selectedCategory = categoryCbx.getSelectedItem().toString();
                     if ("All Categories".equals(selectedCategory)) {
-                        // Eğer "All Categories" seçildiyse, tüm ürünleri göster
                         updateStocksByCategory(null); // null kategori için
                     } else {
-                        // Seçilen kategoriye göre ürünleri göster
                         updateStocksByCategory(selectedCategory);
                     }
                 }
             }
         });
 
-        // "All Categories" seçeneğini ekleyin
         categoryCbx.addItem("All Categories"); //push test
         welcomePageButton.addActionListener(new ActionListener() {
             @Override
@@ -181,11 +178,9 @@ public class UserAccessForm extends JFrame {
             PreparedStatement statement;
 
             if (selectedCategory == null) {
-                // Tüm kategoriler için
                 query = "SELECT * FROM stocks";
                 statement = connection.prepareStatement(query);
             } else {
-                // Belirli kategori için
                 query = "SELECT * FROM stocks WHERE category = ?";
                 statement = connection.prepareStatement(query);
                 statement.setString(1, selectedCategory);

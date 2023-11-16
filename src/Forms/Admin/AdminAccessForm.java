@@ -40,7 +40,6 @@ public class AdminAccessForm extends JFrame {
         root.add(feedback);
         tree1.setModel(new JTree(root).getModel());
 
-        // JTree'de dosyalara tıklandığında formun açılmasını sağla
         tree1.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
@@ -67,7 +66,7 @@ public class AdminAccessForm extends JFrame {
                 Object value = tableModel.getValueAt(selectedRow, 0);
                 if (value instanceof Integer) {
                     int stockId = (int) value;
-                    AdminUpdateForm adminUpdateForm = new AdminUpdateForm(stockId); // Ürün ID'sini iletebilirsiniz.
+                    AdminUpdateForm adminUpdateForm = new AdminUpdateForm(stockId);
                     dispose();
                 }
             }
@@ -119,7 +118,7 @@ public class AdminAccessForm extends JFrame {
                 }
             }
         });
-        categoryCbx.addItem("All Categories"); // push test
+        categoryCbx.addItem("All Categories");
 
         infoButton.addActionListener(new ActionListener() {
             @Override
